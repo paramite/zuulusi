@@ -39,6 +39,19 @@ func main() {
 		log.Fatalf("failed to load configuration file: %v", err)
 	}
 
+	if len(k.Strings("prompt.important")) < 1 {
+		log.Fatalf("Missing config value of prompt.important")
+	}
+
+	if len(k.String("prompt.ack_with_occurences")) < 1 {
+		log.Fatalf("Missing config value of prompt.ack_with_occurences")
+	}
+
+	if len(os.Args) < 2 {
+		log.Fatalf("At least one argument with value of Job ID is required.\n")
+	}
+	jobID := os.Args[1]
+
 	ctx := context.Background()
 	g, err := genkit.Init(ctx,
 		genkit.WithPlugins(&googlegenai.GoogleAI{APIKey: k.String("google.api_key")}),
@@ -54,11 +67,13 @@ func main() {
 	agent := agents.LogCrawlerAgent(g)
 
 	resp, err := agent.Run(ctx, agents.LogCrawlerInput{
-		JobID: "3f8e570ca9144a79b30539ab021388f9/controller/ci-framework-data/logs/openstack-k8s-operators-openstack-must-gather/namespaces",
+		JobID:             jobID,
+		ImportantDirs:     k.Strings("prompt.important"),
+		MinimumOccurences: k.String("prompt.ack_with_occurences"),
 	})
 	if err != nil {
 		log.Fatal("could not generate model response: ", err)
 	}
 
-	fmt.Printf(resp)
+	fmt.Printf("\nFound following potential issue(s):\n%s", resp)
 }

@@ -1,0 +1,13 @@
+interface:
+  verbose: true
+
+prompt:
+  important:
+    - must-gather
+    - openstack
+    - operator
+    - pod
+  ack_with_occurences: two
+
+google:
+  api_key: create key at https://console.cloud.google.com/projectselector2/apis/credentials

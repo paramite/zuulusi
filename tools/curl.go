@@ -15,7 +15,7 @@ type CurlToolInput struct {
 // CurlTool returns a tool function that dowloads content of a given file.
 func CurlTool() func(ctx *ai.ToolContext, input CurlToolInput) ([]byte, error) {
 	return func(ctx *ai.ToolContext, input CurlToolInput) ([]byte, error) {
-		fmt.Printf("Fetching log file %s\n", input.URL)
+		fmt.Printf("... Fetching log file %s\n", input.URL)
 		resp, err := http.Get(input.URL)
 		if err != nil {
 			return nil, err

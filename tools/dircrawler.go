@@ -45,6 +45,9 @@ func processFile(n *html.Node, dirURL string) ([]string, error) {
 							if err != nil {
 								return nil, err
 							}
+							if len(fls) > 0 {
+								fmt.Printf("... Found logs in directory %s\n", fileURL)
+							}
 							files = append(files, fls...)
 						}
 						if fileType == "[TXT]" {
